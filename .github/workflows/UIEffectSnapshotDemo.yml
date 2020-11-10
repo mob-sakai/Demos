@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        # with:
+        #   fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
@@ -40,35 +40,20 @@ jobs:
         with:
           path: /tmp/unity_build
 
-      - name: Commit files
-        shell: bash -xe {0}
-        run: |
-          # clean checkout
-          git checkout -f gh-pages && git clean -fd
+      # - name: Commit files
+      #   shell: bash -xe {0}
+      #   run: |
+      #     # clean checkout
+      #     git checkout -f gh-pages && git clean -fd
 
-          # update build path
-          rm -rf ${{ env.projectPath }} && mv /tmp/unity_build ${{ env.projectPath }}
+      #     # update build path
+      #     rm -rf ${{ env.projectPath }} && mv /tmp/unity_build ${{ env.projectPath }}
 
-          # commit
-          git add ${{ env.projectPath }}
-          git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
+      #     # commit
+      #     git add ${{ env.projectPath }}
+      #     git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
 
-      # - uses: actions/checkout@v2
+      # - uses: ad-m/github-push-action@master
       #   with:
-      #     ref: gh-pages
-      #     clean: false
-
-      # - uses: github-actions-x/commit@v2.7
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     push-branch: 'gh-pages'
-      #     commit-message: 'chore: auto deploy'
-      #     # force-add: 'true'
-      #     files: '${{ env.projectPath }}_build/**'
-      #     # name: commiter name
-      #     # email: my.github@email.com
-
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ github.token }}
-          branch: gh-pages
+      #     github_token: ${{ github.token }}
+      #     branch: gh-pages
