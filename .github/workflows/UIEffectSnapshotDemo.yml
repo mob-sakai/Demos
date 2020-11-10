@@ -10,7 +10,7 @@ on:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
-  projectPath: UIEffectSnapshotDemo
+  projectPath: UIEffectSnapshotDemo____
   unityVersion: 2020.1.5f1
   targetPlatform: WebGL
 
@@ -27,20 +27,30 @@ jobs:
       #     projectPath: ${{ env.projectPath }}
       #     unityVersion: ${{ env.unityVersion }}
       #     targetPlatform: ${{ env.targetPlatform }}
-      #     buildsPath: /tmp/${{ env.projectPath }}
+      #     buildMethod: SimpleBuildInterface.Build
+      #     customParameters: '-out /tmp/unity_build'
       
       - name: Commit files
         run: |
-          mkdir ${{ env.projectPath }}_build
-          echo hogehoge > ${{ env.projectPath }}_build/hogehoge
+          mkdir /tmp/unity_build
+          echo hogehoge > /tmp/unity_build/hogehoge
           echo fugafuga > fugafuga
+
+          git checkout -f gh-pages
+          git status
+
+          rm -rf ${{ env.projectPath }}
+          mv /tmp/unity_build ${{ env.projectPath }}
+
+          # git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
+
 
       - uses: actions-js/push@master
         with:
           github_token: ${{ github.token }}
-          directory: ${{ env.projectPath }}_build
-          branch: 'gh-pages'
+          # directory: ${{ env.projectPath }}_build
+          branch: gh-pages
 
-      - uses: actions/upload-artifact@v2
-        with:
-          path: ${{ env.projectPath }}_build
+      # - uses: actions/upload-artifact@v2
+      #   with:
+      #     path: ${{ env.projectPath }}_build
