@@ -9,9 +9,9 @@ on:
       - '.github/workflows/UIEffectSnapshotDemo.yml'
 
 env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2019_4_8 }}
   projectPath: UIEffectSnapshotDemo
-  unityVersion: 2019.4.10f1
+  unityVersion: 2019.4.8f1
   targetPlatform: WebGL
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ${{ env.projectPath }}/Library
-          key: Library-${{ env.projectPath }}-${{ env.unityVersion }}-${{ env.WebGL }}
+          key: Library-${{ env.projectPath }}-${{ env.unityVersion }}-${{ env.targetPlatform }}
 
       - uses: webbertakken/unity-builder@v1.5
         with:
@@ -35,6 +35,15 @@ jobs:
           buildMethod: SimpleBuildInterface.Build
           customParameters: '-out /tmp/unity_build'
 
+      - uses: webbertakken/unity-builder@v1.5
+        if: always()
+        with:
+          projectPath: ${{ env.projectPath }}
+          unityVersion: ${{ env.unityVersion }}
+          targetPlatform: ${{ env.targetPlatform }}
+          buildMethod: SimpleBuildInterface.Build
+          customParameters: '-out /tmp/unity_build'
+          
       - uses: actions/upload-artifact@v2
         with:
           path: /tmp/unity_build
