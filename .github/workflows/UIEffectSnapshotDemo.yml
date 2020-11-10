@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: gableroux/unity3d:${{ env.unityVersion }}
+      image: gableroux/unity3d:2020.1.5f1
 
     steps:
       - uses: actions/checkout@v2
