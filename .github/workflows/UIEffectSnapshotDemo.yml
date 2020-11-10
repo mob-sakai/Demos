@@ -31,16 +31,16 @@ jobs:
       #     unityVersion: ${{ env.unityVersion }}
       #     targetPlatform: ${{ env.targetPlatform }}
       #     buildMethod: SimpleBuildInterface.Build
-      #     customParameters: '-out ${{ env.projectPath }}_build'
+      #     customParameters: '-out /tmp/unity_build'
 
       # - uses: actions/upload-artifact@v2
       #   with:
-      #     path: ${{ env.projectPath }}_build
+      #     path: /tmp/unity_build
 
       - name: Commit files
         run: |
-          mkdir ${{ env.projectPath }}_build
-          echo hogehoge2 > ${{ env.projectPath }}_build/hogehoge
+          mkdir /tmp/unity_build
+          echo hogehoge2 > /tmp/unity_build/hogehoge
           echo fugafuga2 > fugafuga
 
           # clean checkout
@@ -49,7 +49,8 @@ jobs:
           # update build path
           rm -rf ${{ env.projectPath }} && mv /tmp/unity_build ${{ env.projectPath }}
 
-          # git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
+          git add ${{ env.projectPath }}
+          git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
 
       # - uses: actions/checkout@v2
       #   with:
@@ -66,7 +67,7 @@ jobs:
       #     # name: commiter name
       #     # email: my.github@email.com
 
-      - uses: actions-js/push@master
+      - uses: ad-m/github-push-action@master
         with:
           github_token: ${{ github.token }}
           branch: gh-pages
