@@ -80,6 +80,8 @@ internal class SimpleBuildInterface
                 sb.AppendFormat("[{0}] {1}\n", m.type, m.content);
             }
         }
+
+        Debug.Log(sb);
     }
 
     public static BuildOptions ParseBuildOptions(string options)
