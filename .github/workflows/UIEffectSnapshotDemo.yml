@@ -38,17 +38,22 @@ jobs:
       #     path: /tmp/unity_build
 
       - name: Commit files
+        shell: bash -xe {0}
         run: |
+          ls
+          pwd
+
           mkdir /tmp/unity_build
           echo hogehoge2 > /tmp/unity_build/hogehoge
           echo fugafuga2 > fugafuga
 
           # clean checkout
+          ls
+          pwd
           git checkout -f gh-pages && git clean -fd
 
           # update build path
           rm -rf ${{ env.projectPath }} && mv /tmp/unity_build ${{ env.projectPath }}
-
           git add ${{ env.projectPath }}
           git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
 
