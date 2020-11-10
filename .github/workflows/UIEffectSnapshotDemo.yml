@@ -1,0 +1,46 @@
+name: UIEffectSnapshotDemo
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "UIEffectSnaphotDemo/**"
+      - ".github/workflows/UIEffectSnapshotDemo.yml"
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
+  projectPath: UIEffectSnapshotDemo
+  unityVersion: 2020.1.5f1
+  targetPlatform: WebGL
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        # with:
+        #   fetch-depth: 0
+
+      # - uses: webbertakken/unity-builder@v1.5
+      #   with:
+      #     projectPath: ${{ env.projectPath }}
+      #     unityVersion: ${{ env.unityVersion }}
+      #     targetPlatform: ${{ env.targetPlatform }}
+      #     buildsPath: /tmp/${{ env.projectPath }}
+      
+      - name: Commit files
+        run: |
+          mkdir ${{ env.projectPath }}_build
+          echo hogehoge > ${{ env.projectPath }}_build/hogehoge
+          echo fugafuga > fugafuga
+
+      - uses: actions-js/push@master
+        with:
+          github_token: ${{ github.token }}
+          directory: ${{ env.projectPath }}_build
+          branch: 'gh-pages'
+
+      - uses: actions/upload-artifact@v2
+        with:
+          path: ${{ env.projectPath }}_build
