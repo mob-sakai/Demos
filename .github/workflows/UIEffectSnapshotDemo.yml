@@ -11,7 +11,7 @@ on:
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
   projectPath: UIEffectSnapshotDemo
-  unityVersion: 2020.1.5f1
+  unityVersion: 2019.4.10f1
   targetPlatform: WebGL
 
 jobs:
