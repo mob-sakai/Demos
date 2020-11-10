@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - "UIEffectSnaphotDemo/**"
-      - ".github/workflows/UIEffectSnapshotDemo.yml"
+      - 'UIEffectSnapshotDemo/**'
+      - '.github/workflows/UIEffectSnapshotDemo.yml'
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
@@ -34,7 +34,6 @@ jobs:
           targetPlatform: ${{ env.targetPlatform }}
           buildMethod: SimpleBuildInterface.Build
           customParameters: '-out /tmp/unity_build'
-          allowDirtyBuild: true
 
       - uses: actions/upload-artifact@v2
         with:
