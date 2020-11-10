@@ -19,38 +19,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
+        # with:
+        #   fetch-depth: 0
       # - uses: webbertakken/unity-builder@v1.5
       #   with:
       #     projectPath: ${{ env.projectPath }}
       #     unityVersion: ${{ env.unityVersion }}
       #     targetPlatform: ${{ env.targetPlatform }}
       #     buildMethod: SimpleBuildInterface.Build
-      #     customParameters: '-out /tmp/unity_build'
-      
+      #     customParameters: '-out ${{ env.projectPath }}_build'
+
       - name: Commit files
         run: |
-          mkdir /tmp/unity_build
-          echo hogehoge2 > /tmp/unity_build/hogehoge
+          mkdir ${{ env.projectPath }}_build
+          echo hogehoge2 > ${{ env.projectPath }}_build/hogehoge
           echo fugafuga2 > fugafuga
 
-          git checkout -f gh-pages
-          git clean -fd
+          # git checkout -f gh-pages
+          # git clean -fd
 
-          # git status
-
-          rm -rf ${{ env.projectPath }}
-          mv /tmp/unity_build ${{ env.projectPath }}
-
+          # rm -rf ${{ env.projectPath }}
+          # mv /tmp/unity_build ${{ env.projectPath }}
           # git commit -a -m 'chore: auto deploy ${{ env.projectPath }}'
 
-
-      - uses: actions-js/push@master
+      - uses: actions/checkout@v2
         with:
-          github_token: ${{ github.token }}
-          branch: gh-pages
+          ref: gh-pages
+
+      - uses: github-actions-x/commit@v2.7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'gh-pages'
+          commit-message: 'chore: auto deploy'
+          # force-add: 'true'
+          files: '${{ env.projectPath }}_build/*'
+          # name: commiter name
+          # email: my.github@email.com
+
+      # - uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ github.token }}
+      #     branch: gh-pages
 
       # - uses: actions/upload-artifact@v2
       #   with:
