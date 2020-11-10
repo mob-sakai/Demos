@@ -33,11 +33,13 @@ jobs:
       - name: Commit files
         run: |
           mkdir /tmp/unity_build
-          echo hogehoge > /tmp/unity_build/hogehoge
-          echo fugafuga > fugafuga
+          echo hogehoge2 > /tmp/unity_build/hogehoge
+          echo fugafuga2 > fugafuga
 
           git checkout -f gh-pages
-          git status
+          git clean -fd
+
+          # git status
 
           rm -rf ${{ env.projectPath }}
           mv /tmp/unity_build ${{ env.projectPath }}
@@ -48,7 +50,6 @@ jobs:
       - uses: actions-js/push@master
         with:
           github_token: ${{ github.token }}
-          # directory: ${{ env.projectPath }}_build
           branch: gh-pages
 
       # - uses: actions/upload-artifact@v2
