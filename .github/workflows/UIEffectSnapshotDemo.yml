@@ -10,7 +10,7 @@ on:
 
 env:
   UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2020_1_5 }}
-  projectPath: UIEffectSnapshotDemo____
+  projectPath: UIEffectSnapshotDemo
   unityVersion: 2020.1.5f1
   targetPlatform: WebGL
 
@@ -19,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        # with:
-        #   fetch-depth: 0
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
