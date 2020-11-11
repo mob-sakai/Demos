@@ -8,46 +8,57 @@ on:
       - 'UIEffectSnapshotDemo/**'
       - '.github/workflows/UIEffectSnapshotDemo.yml'
 
-env:
-  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE_2019_4_8 }}
-  projectPath: UIEffectSnapshotDemo
-  unityVersion: 2019.4.8f1
-  targetPlatform: WebGL
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        projectPath:
+          - .
+        unityVersion:
+          - 2019.4.8f1
+        include:
+          - unityVersion: 2019.4.8f1
+            license: UNITY_LICENSE_2019_4_8
+        targetPlatform:
+          # - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
+          # - StandaloneWindows64 # Build a Windows 64-bit standalone.
+          - StandaloneLinux64 # Build a Linux 64-bit standalone.
+          # - iOS # Build an iOS player.
+          # - Android # Build an Android .apk.
+          # - StandaloneWindows # Build a Windows standalone.
+          - WebGL # WebGL.
+          # - WSAPlayer # Build an Windows Store Apps player.
+          # - PS4 # Build a PS4 Standalone.
+          # - XboxOne # Build a Xbox One Standalone.
+          # - tvOS # Build to Apple's tvOS platform.
+          # - Switch # Build a Nintendo Switch player
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        # with:
+        #   fetch-depth: 0
 
       - uses: actions/cache@v2
         with:
-          path: ${{ env.projectPath }}/Library
-          key: Library-${{ env.projectPath }}-${{ env.unityVersion }}-${{ env.targetPlatform }}
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }}
 
       - uses: webbertakken/unity-builder@v1.5
         with:
-          projectPath: ${{ env.projectPath }}
-          unityVersion: ${{ env.unityVersion }}
-          targetPlatform: ${{ env.targetPlatform }}
-          buildMethod: SimpleBuildInterface.Build
-          customParameters: '-out /tmp/unity_build'
-          allowDirtyBuild: true
-
-      - uses: webbertakken/unity-builder@v1.5
-        if: always()
-        with:
-          projectPath: ${{ env.projectPath }}
-          unityVersion: ${{ env.unityVersion }}
-          targetPlatform: ${{ env.targetPlatform }}
-          buildMethod: SimpleBuildInterface.Build
-          customParameters: '-out /tmp/unity_build'
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          # buildMethod: SimpleBuildInterface.Build
+          # customParameters: '-out /tmp/unity_build'
+          # allowDirtyBuild: true
+        env:
+          UNITY_LICENSE: ${{ secrets[matrix.license] }}
           
       - uses: actions/upload-artifact@v2
         with:
-          path: /tmp/unity_build
+          name: Build (${{ matrix.projectPath }}-${{ matrix.unityVersion }}-${{ matrix.targetPlatform }})
+          path: build
 
       # - name: Commit files
       #   shell: bash -xe {0}
