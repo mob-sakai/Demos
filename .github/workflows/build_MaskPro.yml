@@ -1,0 +1,48 @@
+# Secrets
+#   UNITY_LICENSE:
+#   GH_TOKEN:
+name: 🛠️ Build MaskPro Demo
+on:
+  workflow_dispatch:
+
+env:
+  USER: mob-sakai
+  REPOSITORY: MaskTweaksForUGUI
+  REF: sandbox
+  UNITY_VERSION: 2018.4.35f1
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: ${{ env.USER }}/${{ env.REPOSITORY }}
+          ref: ${{ env.REF }}
+          submodules: true
+
+      - uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library-${{ env.UNITY_VERSION }}
+
+      - uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: WebGL
+          unityVersion: ${{ env.UNITY_VERSION }}
+          versioning: None
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+
+      - uses: JamesIves/github-pages-deploy-action@4
+        with:
+          branch: gh-pages
+          folder: build
+          target-folder: docs/${{ env.REPOSITORY }}/WebGL/WebGL
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Build
+          path: build
