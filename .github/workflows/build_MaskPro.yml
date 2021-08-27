@@ -9,7 +9,7 @@ env:
   USER: mob-sakai
   REPOSITORY: MaskTweaksForUGUI
   REF: sandbox
-  UNITY_VERSION: 2018.4.35f1
+  UNITY_VERSION: 2019.4.29f1
 
 jobs:
   build:
