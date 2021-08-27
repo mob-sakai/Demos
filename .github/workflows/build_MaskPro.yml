@@ -22,7 +22,11 @@ jobs:
           repository: ${{ env.USER }}/${{ env.REPOSITORY }}
           ref: ${{ env.REF }}
           submodules: true
-
+          fetch-depth: 0
+          
+      - run: git checkout ${{ github.sha }}
+        working-directory: Packages/dev
+        
       - uses: actions/cache@v2
         with:
           path: Library
