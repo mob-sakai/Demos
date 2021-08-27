@@ -4,12 +4,16 @@
 name: 🛠️ Build MaskPro Demo
 on:
   workflow_dispatch:
+    inputs:
+      unityVersion:
+        description: "Unity version to build"
+        required: true
+        default: '2019.4.29f1'
 
 env:
   USER: mob-sakai
-  REPOSITORY: MaskTweaksForUGUI
+  REPOSITORY: MaskProForUGUI
   REF: sandbox
-  UNITY_VERSION: 2019.4.29f1
 
 jobs:
   build:
@@ -30,12 +34,12 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: Library
-          key: Library-${{ env.UNITY_VERSION }}
+          key: Library-${{ github.event.inputs.unityVersion }}
 
       - uses: game-ci/unity-builder@v2
         with:
           targetPlatform: WebGL
-          unityVersion: ${{ env.UNITY_VERSION }}
+          unityVersion: ${{ github.event.inputs.unityVersion }}
           versioning: None
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
